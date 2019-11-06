@@ -1,0 +1,3 @@
+这里因为跟日志是没啥关系的，所以就不做日志的输出了，但是slf4j-api-1.8.0-beta4.jar是必须的，不然
+将无法运行，SLF4J: No SLF4J providers were found.这个问题是因为没有和log4j结合导致的，我没有
+引入log4j的包，具体怎么结合可以google一下
