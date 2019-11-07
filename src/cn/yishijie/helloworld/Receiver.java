@@ -12,11 +12,11 @@ public class Receiver {
 
     //队列名字要和send中的一样
     private final static String QUEUE_NAME = "hello";
-
+    //connectFactory->connection->channel->queueDeclare
     public static void main(String[] argv) throws Exception {
         ConnectionFactory factory = new ConnectionFactory();
         factory.setHost("localhost");
-        Connection connection = null;
+        Connection connection = factory.newConnection();
         Channel channel = null;
         try {
              factory.newConnection();
@@ -32,11 +32,12 @@ public class Receiver {
         }catch (Exception e){
             System.out.println(e.getMessage());
         }finally {
+            //这里不能关闭，否则无法获取消息
             if(channel != null){
-                channel.close();
+                //channel.close();
             }
             if(connection != null){
-                connection.close();
+                //connection.close();
             }
         }
     }
