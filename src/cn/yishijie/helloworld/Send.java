@@ -45,8 +45,12 @@ public class Send {
              */
             Map<String, Object> arguments = new HashMap<>();
             //arguments.put("x-message-ttl", 100000);//设置消息10秒钟后自动清除
+            //arguments.put("x-expires", 10000);//一个生产者,10秒之后该队列会删除，或者启动一个生产者，再启动一个消费者，消费者运行结束后10秒，队列也会被删除
+            //arguments.put("x-max-length", 4);//默认无效大，假设我设置四条消息，那么后来的消息如果超过了最大数，那么会把最先的队列消息删除
+            //arguments.put("x-max-length-bytes", 4);//用于指定队列存储消息的占用空间大小，当达到最大值是会删除之前的数据腾出空间
+            //x-max-priority: 设置消息的优先级，优先级值越大，越被提前消费。
             channel.queueDeclare(QUEUE_NAME, false, false, false, arguments);
-            String message = "Hello World!";
+            String message = "hello world";
             /**
              * basicPublish(String exchange, String routingKey, BasicProperties props, byte[] body)
              * 第三个参数props：设置投递模式为持久化，如果此值是persistent

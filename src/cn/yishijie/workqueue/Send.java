@@ -1,0 +1,30 @@
+package cn.yishijie.workqueue;
+
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.Connection;
+import com.rabbitmq.client.ConnectionFactory;
+import com.rabbitmq.client.MessageProperties;
+
+/**
+ * @author chenjianhui on 2019/11/07
+ */
+public class Send {
+
+    private static final String TASK_QUEUE_NAME = "task_queue";
+
+    public static void main(String[] argv) throws Exception {
+        ConnectionFactory factory = new ConnectionFactory();
+        factory.setHost("localhost");
+        //java7关闭流的一种方式
+        try (Connection connection = factory.newConnection();
+             Channel channel = connection.createChannel()) {
+
+            channel.queueDeclare(TASK_QUEUE_NAME, true, false, false, null);
+            String message = "jeff chan,cara liu";
+            channel.basicPublish("", TASK_QUEUE_NAME,
+                    MessageProperties.PERSISTENT_TEXT_PLAIN,
+                    message.getBytes("UTF-8"));
+            System.out.println(" [x] Sent '" + message + "'");
+        }
+    }
+}
