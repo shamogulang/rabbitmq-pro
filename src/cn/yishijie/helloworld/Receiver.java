@@ -1,8 +1,8 @@
 package cn.yishijie.helloworld;
 
+import cn.yishijie.common.ConnectionUtils;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
-import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.DeliverCallback;
 
 /**
@@ -12,21 +12,17 @@ public class Receiver {
 
     //队列名字要和send中的一样
     private final static String QUEUE_NAME = "hello";
-    //connectFactory->connection->channel->queueDeclare
+
     public static void main(String[] argv) throws Exception {
-        ConnectionFactory factory = new ConnectionFactory();
-        factory.setHost("localhost");
-        Connection connection = factory.newConnection();
+        Connection connection = ConnectionUtils.getConnection();
         Channel channel = null;
         try {
-             factory.newConnection();
              channel = connection.createChannel();
              channel.queueDeclare(QUEUE_NAME, false, false, false, null);
-             System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
 
             DeliverCallback deliverCallback = (consumerTag, delivery) -> {
                 String message = new String(delivery.getBody(), "UTF-8");
-                System.out.println(" [x] Received '" + message + "'");
+                System.out.println(" server received message: '" + message + "'");
             };
             channel.basicConsume(QUEUE_NAME, true, deliverCallback, consumerTag -> { });
         }catch (Exception e){
